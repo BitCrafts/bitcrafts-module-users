@@ -23,7 +23,7 @@ jobs:
       - name: Remplacer les variables dans NuGet.config
         run: |
            sed -i "s|{NUGET_USERNAME}|${GITHUB_REPOSITORY_OWNER}|g" src/nuget.config
-           sed -i "s|{NUGET_PASSWORD}|${GITHUB_TOKEN}|g" src/nuget.config
+           sed -i "s|{NUGET_PASSWORD}|${{ secrets.GITHUB_TOKEN }}|g" src/nuget.config
       
       - name: Restore dependencies
         run: dotnet restore src/BitCrafts.Module.Users.sln
