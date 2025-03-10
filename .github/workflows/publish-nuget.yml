@@ -18,12 +18,12 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x' # Modifier selon votre version du SDK
+          dotnet-version: '9.0.x'
       
       - name: Remplacer les variables dans NuGet.config
         run: |
-           sed -i "s|{NUGET_USERNAME}|${{ secrets.NUGET_USERNAME }}|g" src/nuget.config
-           sed -i "s|{NUGET_PASSWORD}|${{ secrets.NUGET_PASSWORD }}|g" src/nuget.config
+           sed -i "s|{NUGET_USERNAME}|${GITHUB_REPOSITORY_OWNER}|g" src/nuget.config
+           sed -i "s|{NUGET_PASSWORD}|${GITHUB_TOKEN}|g" src/nuget.config
       
       - name: Restore dependencies
         run: dotnet restore src/BitCrafts.Module.Users.sln
@@ -41,5 +41,4 @@ jobs:
         run: dotnet nuget push *.nupkg -k ${GITHUB_TOKEN} -s "Github"  --skip-duplicate --no-symbols
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          NUGET_USERNAME: ${{ secrets.GITHUB_REPOSITORY_OWNER }}
-          NUGET_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          
