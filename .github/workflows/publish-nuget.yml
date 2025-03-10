@@ -22,8 +22,8 @@ jobs:
       
       - name: Remplacer les variables dans NuGet.config
         run: |
-           sed -i "s|{NUGET_USERNAME}|${{ secrets.NUGET_USERNAME }}|g" nuget.config
-           sed -i "s|{NUGET_PASSWORD}|${{ secrets.NUGET_PASSWORD }}|g" nuget.config
+           sed -i "s|{NUGET_USERNAME}|${{ secrets.NUGET_USERNAME }}|g" src/nuget.config
+           sed -i "s|{NUGET_PASSWORD}|${{ secrets.NUGET_PASSWORD }}|g" src/nuget.config
       
       - name: Restore dependencies
         run: dotnet restore src/BitCrafts.Module.Users.sln
