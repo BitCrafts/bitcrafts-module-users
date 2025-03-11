@@ -22,8 +22,10 @@ public partial class UsersView : BaseView, IUsersView
 
     public UsersView(IEventAggregator eventAggregator) : this()
     {
-        _eventAggregator = eventAggregator;
         _users = new ObservableCollection<User>();
+
+        _eventAggregator = eventAggregator;
+
         UsersDataGrid.ItemsSource = _users;
     }
 
@@ -49,6 +51,7 @@ public partial class UsersView : BaseView, IUsersView
 
     protected override void OnLoaded(object sender, RoutedEventArgs e)
     {
+        if (Design.IsDesignMode) return;
         _eventAggregator.Subscribe<CreateUserEvent>(OnCreateUser);
         _eventAggregator.Subscribe<DeleteUserEvent>(OnDeleteUser);
         _eventAggregator.Subscribe<DisplayUsersEvent>(OnDisplayUsers);
@@ -69,6 +72,7 @@ public partial class UsersView : BaseView, IUsersView
     protected override void OnUnloaded(object sender, RoutedEventArgs e)
     {
         base.OnUnloaded(sender, e);
+        if (Design.IsDesignMode) return;
         _eventAggregator.Unsubscribe<CreateUserEvent>(OnCreateUser);
         _eventAggregator.Unsubscribe<DeleteUserEvent>(OnDeleteUser);
         _eventAggregator.Unsubscribe<DisplayUsersEvent>(OnDisplayUsers);
