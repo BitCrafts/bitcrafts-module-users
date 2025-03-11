@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="src/BitCrafts.Avalonia.Application/App.axaml" value="src/BitCrafts.Avalonia.Application/BitCrafts.Avalonia.Application.csproj" />
+        <entry key="src/BitCrafts.Users/Views/UsersView.axaml" value="src/BitCrafts.Avalonia.Application/BitCrafts.Avalonia.Application.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
