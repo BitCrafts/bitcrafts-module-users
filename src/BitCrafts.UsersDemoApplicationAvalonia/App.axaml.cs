@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using BitCrafts.Infrastructure.Abstraction.Application.Managers;
+using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Infrastructure.Abstraction.Threading;
 using BitCrafts.Infrastructure.Application.Avalonia.Extensions;
 using BitCrafts.Infrastructure.Application.Avalonia.Managers;
@@ -28,6 +29,7 @@ public partial class App : global::Avalonia.Application
         services.AddUsersModuleServices();
         _serviceProvider = services.BuildServiceProvider();
         _serviceProvider.GetRequiredService<IBackgroundThreadDispatcher>().Start();
+        _serviceProvider.GetRequiredService<IEventAggregator>();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var uiManager = (AvaloniaUiManager)_serviceProvider.GetRequiredService<IUiManager>();
