@@ -3,7 +3,7 @@ using BitCrafts.Module.Users.Abstraction.Entities;
 
 namespace BitCrafts.Module.Users.Abstraction.Events;
 
-public class CreateUserEventRequest : BaseEventRequest
+public class CreateUserEventRequest : BaseEvent
 {
     public User User { get; set; }
     public string Password { get; set; }

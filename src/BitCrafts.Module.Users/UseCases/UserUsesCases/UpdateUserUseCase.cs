@@ -26,7 +26,7 @@ public sealed class UpdateUserUseCase : BaseUseCase<UpdateUserUseCaseInput>, IUp
     protected override async Task ExecuteCore(UpdateUserUseCaseInput input)
     {
         input.User.FamilyRole = input.FamilyRole;
-        _repositoryUnitOfWork.GetRepository<IUsersRepository>().Update(input.User);
+        await _repositoryUnitOfWork.GetRepository<IUsersRepository>().UpdateAsync(input.User);
         var result = await _repositoryUnitOfWork.CommitAsync().ConfigureAwait(false);
         _eventAggregator.Publish(new UpdateUserEvent(input.User, result > 0));
     }

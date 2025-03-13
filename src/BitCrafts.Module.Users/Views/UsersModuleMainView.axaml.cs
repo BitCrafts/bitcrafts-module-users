@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
-using BitCrafts.Infrastructure.Abstraction.Avalonia.Views;
+using BitCrafts.Infrastructure.Avalonia.Views;
 using BitCrafts.Module.Users.Abstraction.Views;
 
 namespace BitCrafts.Module.Users.Views;

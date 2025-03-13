@@ -28,8 +28,7 @@ public partial class App : global::Avalonia.Application
         services.AddBitCraftsInfrastructure().AddBitCraftsAvaloniaApplication();
         services.AddUsersModuleServices();
         _serviceProvider = services.BuildServiceProvider();
-        _serviceProvider.GetRequiredService<IBackgroundThreadDispatcher>().Start();
-        _serviceProvider.GetRequiredService<IEventAggregator>();
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var uiManager = (AvaloniaUiManager)_serviceProvider.GetRequiredService<IUiManager>();

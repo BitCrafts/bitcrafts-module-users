@@ -1,5 +1,5 @@
 using Avalonia.Interactivity;
-using BitCrafts.Infrastructure.Abstraction.Avalonia.Views;
+using BitCrafts.Infrastructure.Avalonia.Views;
 using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Entities;
 using BitCrafts.Module.Users.Abstraction.Events;
@@ -19,7 +19,6 @@ public partial class CreateUserView : BaseView, ICreateUserView
     public CreateUserView(IEventAggregator eventAggregator) : this()
     {
         _eventAggregator = eventAggregator;
-        IsModal = true;
     }
 
     public override void UnsetBusy()

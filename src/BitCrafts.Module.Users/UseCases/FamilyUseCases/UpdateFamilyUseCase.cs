@@ -31,7 +31,7 @@ public sealed class UpdateFamilyUseCase : BaseUseCase<UpdateFamilyUseCaseInput>,
     {
         try
         {
-            _repositoryUnitOfWork.GetRepository<IRepository<Family>>().Update(input.Family);
+            await _repositoryUnitOfWork.GetRepository<IRepository<Family>>().UpdateAsync(input.Family);
             var result = await _repositoryUnitOfWork.CommitAsync();
 
             _eventAggregator.Publish(new UpdateFamilyEvent(input.Family, result > 0));

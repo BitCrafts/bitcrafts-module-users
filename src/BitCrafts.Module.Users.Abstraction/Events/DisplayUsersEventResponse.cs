@@ -3,7 +3,7 @@ using BitCrafts.Module.Users.Abstraction.Entities;
 
 namespace BitCrafts.Module.Users.Abstraction.Events;
 
-public class DisplayUsersEventResponse : BaseEventResponse
+public class DisplayUsersEventResponse : BaseEvent
 {
     public DisplayUsersEventResponse(IEnumerable<User> users)
     {
