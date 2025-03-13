@@ -24,7 +24,13 @@ public class CreateUserPresenter : BasePresenter<ICreateUserView>, ICreateUserPr
         _createUserUseCase = createUserUseCase;
         _eventAggregator = eventAggregator;
         _windowManager = windowManager;
+        
+    }
+
+    protected override void OnViewLoaded(object sender, EventArgs e)
+    {
         View.SetTitle("Create User");
+        base.OnViewLoaded(sender, e);
     }
 
     protected override void OnInitialize()

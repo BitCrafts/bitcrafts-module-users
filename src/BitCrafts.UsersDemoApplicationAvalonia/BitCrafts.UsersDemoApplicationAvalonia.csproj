@@ -16,10 +16,10 @@
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.5" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.5" />
-        <PackageReference Include="BitCrafts.Infrastructure" Version="1.0.4" />
-        <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.0.4" />
-        <PackageReference Include="BitCrafts.Infrastructure.Application.Avalonia" Version="1.0.4" />
-        <PackageReference Include="BitCrafts.Infrastructure.Avalonia" Version="1.0.4" />
+        <PackageReference Include="BitCrafts.Infrastructure" Version="1.0.5" />
+        <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.0.5" />
+        <PackageReference Include="BitCrafts.Infrastructure.Application.Avalonia" Version="1.0.5" />
+        <PackageReference Include="BitCrafts.Infrastructure.Avalonia" Version="1.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

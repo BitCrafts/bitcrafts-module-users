@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.0.4" />
+      <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.0.5" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
         <PrivateAssets>all</PrivateAssets>
