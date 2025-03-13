@@ -24,12 +24,24 @@
         <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Views\CreateUserView.axaml.cs">
-            <DependentUpon>CreateUserView.axaml</DependentUpon>
+        <Compile Update="Views\User\UsersView.axaml.cs">
+          <DependentUpon>UsersView.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\User\CreateUserView.axaml.cs">
+          <DependentUpon>CreateUserView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Presenters\Family\" />
+      <Folder Include="Views\Family\" />
     </ItemGroup>
 
 </Project>

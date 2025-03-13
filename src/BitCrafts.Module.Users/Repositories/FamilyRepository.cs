@@ -5,9 +5,9 @@ using BitCrafts.Module.Users.Entities;
 
 namespace BitCrafts.Module.Users.Repositories;
 
-public sealed class UsersRepository : Repository<UsersDbContext, User>, IUsersRepository
+public sealed class FamilyRepository : Repository<UsersDbContext, Family>, IFamilyRepository
 {
-    public UsersRepository(UsersDbContext context) : base(context)
+    public FamilyRepository(UsersDbContext context) : base(context)
     {
     }
 }

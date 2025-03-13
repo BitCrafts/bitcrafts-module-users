@@ -13,4 +13,5 @@ public class UpdateUserEvent : BaseEvent
 
     public User User { get; private set; }
     public bool Updated { get; set; }
+    
 }
