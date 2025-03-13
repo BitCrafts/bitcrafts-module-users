@@ -3,7 +3,6 @@ using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
 using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Infrastructure.Abstraction.Threading;
 using BitCrafts.Module.Users.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Presenters;
 using BitCrafts.Module.Users.Abstraction.Presenters.User;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
@@ -21,81 +20,78 @@ public sealed class UsersPresenter : BasePresenter<IUsersView>, IUsersPresenter
     private readonly IEventAggregator _eventAggregator;
     private readonly IUpdateUserUseCase _updateUserUseCase;
     private readonly IWindowManager _windowManager;
-    private readonly IWorkspaceManager _workspaceManager;
-    private readonly IBackgroundThreadDispatcher _backgroundThreadDispatcher;
-    private readonly UsersDbContext _usersDbContext;
 
     public UsersPresenter(IDisplayUsersUseCase displayUsersUseCase,
         IUpdateUserUseCase updateUserUseCase, IDeleteUserUseCase deleteUserUseCase,
         IWindowManager windowManager, IUsersView view, ILogger<UsersPresenter> logger,
-        IWorkspaceManager workspaceManager, IBackgroundThreadDispatcher backgroundThreadDispatcher,
-        UsersDbContext usersDbContext,
         IEventAggregator eventAggregator) : base(view, logger)
     {
         _windowManager = windowManager;
-        _workspaceManager = workspaceManager;
-        _backgroundThreadDispatcher = backgroundThreadDispatcher;
-        _usersDbContext = usersDbContext;
         _eventAggregator = eventAggregator;
         _displayUsersUseCase = displayUsersUseCase;
         _updateUserUseCase = updateUserUseCase;
         _deleteUserUseCase = deleteUserUseCase;
+        View.SetTitle("Users");
     }
 
     protected override async void OnViewLoaded(object sender, EventArgs e)
     {
         base.OnViewLoaded(sender, e);
-        View.SetBusy("Applying database migrations...");
-        await _backgroundThreadDispatcher.InvokeAsync(ApplyDatabaseMigration);
         View.SetBusy("Loading users...");
         await _displayUsersUseCase.Execute();
         View.UnsetBusy();
     }
 
-    
-    private void ApplyDatabaseMigration()
-    {
-        Logger.LogInformation("Applying database migrations...");
-        _usersDbContext.Database.Migrate();
-        Logger.LogInformation("Applied database migrations");
-    }
 
     protected override void OnInitialize()
     {
-        _eventAggregator.Subscribe<AddUserClickEvent>(OnAddUserClicked);
-        _eventAggregator.Subscribe<DeleteUserClickEvent>(OnDeleteUserClicked);
-        _eventAggregator.Subscribe<UpdateUserClickEvent>(OnUpdateUserClicked);
-        _eventAggregator.Subscribe<UsersPresenterCloseEvent>(OnUsersPresenterClosed);
+        View.UserDeleted += OnDeleteUserClicked;
+        View.UserUpdated += OnUpdateUserClicked;
+        View.OpenCreateUserDialog += ViewOnOpenCreateUserDialog;
+        _eventAggregator.Subscribe<CreateUserEvent>(OnUserCreated);
+        _eventAggregator.Subscribe<DisplayUsersEvent>(OnDisplayUsers);
+        _eventAggregator.Subscribe<DeleteUserEvent>(OnDeleteUser);
     }
 
-    private void OnUsersPresenterClosed(UsersPresenterCloseEvent obj)
+    private void OnDeleteUser(DeleteUserEvent obj)
     {
-        _workspaceManager.ClosePresenter<UsersPresenter>();
+        View.DeleteUser(obj.UserId);
     }
 
-    private async void OnUpdateUserClicked(UpdateUserClickEvent obj)
+    private void OnDisplayUsers(DisplayUsersEvent obj)
     {
-        await _updateUserUseCase.Execute(new UpdateUserUseCaseInput(obj.User));
+        View.RefreshUsers(obj.Users);
     }
 
-    private async void OnDeleteUserClicked(DeleteUserClickEvent obj)
-    {
-        await _deleteUserUseCase.Execute(new DeleteUserUseCaseInput(obj.User));
-    }
-
-    private async void OnAddUserClicked(AddUserClickEvent obj)
+    private async void ViewOnOpenCreateUserDialog(object sender, EventArgs args)
     {
         await _windowManager.ShowDialogWindowAsync<ICreateUserPresenter>();
+    }
+
+    private void OnUserCreated(CreateUserEvent obj)
+    {
+        if (obj.Created)
+            View.AppendUser(obj.User);
+    }
+
+    private async void OnUpdateUserClicked(object sender, Abstraction.Entities.User obj)
+    {
+        await _updateUserUseCase.Execute(new UpdateUserUseCaseInput(obj));
+    }
+
+    private async void OnDeleteUserClicked(object sender, Abstraction.Entities.User obj)
+    {
+        await _deleteUserUseCase.Execute(new DeleteUserUseCaseInput(obj));
     }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            _eventAggregator.Unsubscribe<AddUserClickEvent>(OnAddUserClicked);
-            _eventAggregator.Unsubscribe<DeleteUserClickEvent>(OnDeleteUserClicked);
-            _eventAggregator.Unsubscribe<UpdateUserClickEvent>(OnUpdateUserClicked);
-            _eventAggregator.Unsubscribe<UsersPresenterCloseEvent>(OnUsersPresenterClosed);
+            View.UserDeleted -= OnDeleteUserClicked;
+            View.UserUpdated -= OnUpdateUserClicked;
+            _eventAggregator.Unsubscribe<CreateUserEvent>(OnUserCreated);
+            _eventAggregator.Unsubscribe<DisplayUsersEvent>(OnDisplayUsers);
         }
 
         base.Dispose(disposing);

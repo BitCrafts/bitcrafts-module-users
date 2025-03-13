@@ -1,24 +1,18 @@
-using BitCrafts.Module.Users.Abstraction.Entities;
 using BitCrafts.Module.Users.Abstraction.Presenters;
 using BitCrafts.Module.Users.Abstraction.Presenters.User;
 using BitCrafts.Module.Users.Abstraction.Repositories;
-using BitCrafts.Module.Users.Abstraction.UseCases;
-using BitCrafts.Module.Users.Abstraction.UseCases.FamilyUseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
 using BitCrafts.Module.Users.Abstraction.Views;
 using BitCrafts.Module.Users.Entities;
 using BitCrafts.Module.Users.Presenters;
 using BitCrafts.Module.Users.Presenters.User;
 using BitCrafts.Module.Users.Repositories;
-using BitCrafts.Module.Users.UseCases;
-using BitCrafts.Module.Users.UseCases.FamilyUseCases;
 using BitCrafts.Module.Users.UseCases.UserUsesCases;
 using BitCrafts.Module.Users.Views;
+using BitCrafts.Module.Users.Views.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using CreateUserView = BitCrafts.Module.Users.Views.User.CreateUserView;
-using UsersView = BitCrafts.Module.Users.Views.User.UsersView;
+using Microsoft.Extensions.DependencyInjection; 
 
 namespace BitCrafts.Module.Users.Extensions;
 
@@ -45,8 +39,7 @@ public static class ServiceCollectionExtension
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddTransient<IUsersRepository, UsersRepository>();
-        services.AddTransient<IFamilyRepository, FamilyRepository>();
+        services.AddTransient<IUsersRepository, UsersRepository>(); 
         return services;
     }
 
@@ -72,11 +65,6 @@ public static class ServiceCollectionExtension
         services.AddTransient<IDeleteUserUseCase, DeleteUserUseCase>();
         services.AddTransient<IUpdateUserUseCase, UpdateUserUseCase>();
         services.AddTransient<IDisplayUsersUseCase, DisplayUsersUseCase>();
-        services.AddTransient<ICreateFamilyUseCase, CreateFamilyUseCase>();
-        services.AddTransient<IUpdateFamilyUseCase, UpdateFamilyUseCase>();
-        services.AddTransient<IDeleteFamilyUseCase, DeleteFamilyUseCase>();
-        services.AddTransient<IGetFamiliesUseCase, GetFamiliesUseCase>();
-        services.AddTransient<IGetFamilyUseCase, GetFamilyUseCase>();
         return services;
     }
 }

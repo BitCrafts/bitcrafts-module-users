@@ -3,7 +3,6 @@ using BitCrafts.Infrastructure.Abstraction.Repositories;
 using BitCrafts.Infrastructure.Abstraction.UseCases;
 using BitCrafts.Module.Users.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Repositories;
-using BitCrafts.Module.Users.Abstraction.UseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
 using BitCrafts.Module.Users.Entities;
@@ -25,7 +24,6 @@ public sealed class UpdateUserUseCase : BaseUseCase<UpdateUserUseCaseInput>, IUp
 
     protected override async Task ExecuteCore(UpdateUserUseCaseInput input)
     {
-        input.User.FamilyRole = input.FamilyRole;
         await _repositoryUnitOfWork.GetRepository<IUsersRepository>().UpdateAsync(input.User);
         var result = await _repositoryUnitOfWork.CommitAsync().ConfigureAwait(false);
         _eventAggregator.Publish(new UpdateUserEvent(input.User, result > 0));

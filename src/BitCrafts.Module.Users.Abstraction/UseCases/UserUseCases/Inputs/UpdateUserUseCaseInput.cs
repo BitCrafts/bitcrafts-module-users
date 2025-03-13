@@ -10,6 +10,4 @@ public class UpdateUserUseCaseInput
     }
 
     public User User { get; set; }
-    public int ResponsibleId { get; set; }
-    public FamilyRole FamilyRole { get; set; }
 }

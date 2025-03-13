@@ -2,10 +2,8 @@ using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Infrastructure.Abstraction.Repositories;
 using BitCrafts.Infrastructure.Abstraction.Services;
 using BitCrafts.Infrastructure.Abstraction.UseCases;
-using BitCrafts.Module.Users.Abstraction.Entities;
 using BitCrafts.Module.Users.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Repositories;
-using BitCrafts.Module.Users.Abstraction.UseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
 using BitCrafts.Module.Users.Entities;
@@ -31,29 +29,14 @@ public sealed class CreateUserUseCase : BaseUseCase<CreateUserUseCaseInput>, ICr
     {
         var salt = _hashingService.GenerateSalt();
         var hashedPassword = _hashingService.HashPassword(input.Password);
-        var userAccount = new UserAccount
-        {
-            HashedPassword = hashedPassword,
-            PasswordSalt = salt
-        };
-        User user;
-        user = input.User;
-        user.UserAccount = userAccount;
 
-        if (input.ResponsibleId > 0)
-        {
-            var family = new Family
-            {
-                ResponsibleId = input.ResponsibleId
-            };
-            user.Families.Add(family);
-            user.FamilyRole = input.FamilyRole;
-            await _repositoryUnitOfWork.GetRepository<IFamilyRepository>().AddAsync(family);
-        }
+        input.User.HashedPassword = hashedPassword;
+        input.User.PasswordSalt = salt;
 
-        user = await _repositoryUnitOfWork.GetRepository<IUsersRepository>().AddAsync(user).ConfigureAwait(false);
+        var createdUser = await _repositoryUnitOfWork.GetRepository<IUsersRepository>().AddAsync(input.User)
+            .ConfigureAwait(false);
         var result = await _repositoryUnitOfWork.CommitAsync().ConfigureAwait(false);
 
-        _eventAggregator.Publish(new CreateUserEvent(user, result > 0));
+        _eventAggregator.Publish(new CreateUserEvent(createdUser, result > 0));
     }
 }

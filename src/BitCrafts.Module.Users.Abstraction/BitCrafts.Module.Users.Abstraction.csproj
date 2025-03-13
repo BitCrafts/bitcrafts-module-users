@@ -25,9 +25,4 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Events\UserEvents\" />
-      <Folder Include="Views\User\" />
-    </ItemGroup>
-
 </Project>

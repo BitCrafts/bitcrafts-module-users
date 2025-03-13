@@ -2,37 +2,21 @@ using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using BitCrafts.Infrastructure.Avalonia.Views;
-using BitCrafts.Infrastructure.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Views;
 
 namespace BitCrafts.Module.Users.Views.User;
 
 public partial class UsersView : BaseView, IUsersView
 {
-    private readonly IEventAggregator _eventAggregator;
     private readonly ObservableCollection<Abstraction.Entities.User> _users;
-
+    public event EventHandler<Abstraction.Entities.User> UserUpdated;
+    public event EventHandler<Abstraction.Entities.User> UserDeleted;
+    public event EventHandler OpenCreateUserDialog;
 
     public UsersView()
     {
         InitializeComponent();
-    }
-
-    public UsersView(IEventAggregator eventAggregator) : this()
-    {
         _users = new ObservableCollection<Abstraction.Entities.User>();
-
-        _eventAggregator = eventAggregator;
-
-        UsersDataGrid.ItemsSource = _users;
-    }
-
-    public void RefreshUsers(IEnumerable<Abstraction.Entities.User> users)
-    {
-        _users.Clear();
-        foreach (var user in users) _users.Add(user);
-
         UsersDataGrid.ItemsSource = _users;
     }
 
@@ -48,39 +32,20 @@ public partial class UsersView : BaseView, IUsersView
         base.UnsetBusy();
     }
 
-    protected override void OnLoaded(object sender, RoutedEventArgs e)
+    public void RefreshUsers(IEnumerable<Abstraction.Entities.User> users)
     {
-        if (Design.IsDesignMode) return;
-        _eventAggregator.Subscribe<CreateUserEvent>(OnCreateUser);
-        _eventAggregator.Subscribe<DeleteUserEvent>(OnDeleteUser);
-        _eventAggregator.Subscribe<DisplayUsersEvent>(OnDisplayUsers);
-        base.OnLoaded(sender, e);
+        _users.Clear();
+        foreach (var user in users) _users.Add(user);
+
+        UsersDataGrid.ItemsSource = _users;
     }
 
-    private void OnDisplayUsers(DisplayUsersEvent obj)
+    public void DeleteUser(int userId)
     {
-        RefreshUsers(obj.Users);
+        var userFound = _users.FirstOrDefault(u => u.Id == userId);
+        if (userFound != null) _users.Remove(userFound);
     }
 
-    private void OnDeleteUser(DeleteUserEvent obj)
-    {
-        var user = _users.FirstOrDefault(u => u.Id == obj.UserId);
-        if (user != null) _users.Remove(user);
-    }
-
-    protected override void OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        base.OnUnloaded(sender, e);
-        if (Design.IsDesignMode) return;
-        _eventAggregator.Unsubscribe<CreateUserEvent>(OnCreateUser);
-        _eventAggregator.Unsubscribe<DeleteUserEvent>(OnDeleteUser);
-        _eventAggregator.Unsubscribe<DisplayUsersEvent>(OnDisplayUsers);
-    }
-
-    private void OnCreateUser(CreateUserEvent obj)
-    {
-        AppendUser(obj.User);
-    }
 
     public void AppendUser(Abstraction.Entities.User user)
     {
@@ -90,12 +55,7 @@ public partial class UsersView : BaseView, IUsersView
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
-        _eventAggregator.Publish(new AddUserClickEvent());
-    }
-
-    private void Closebutton_OnClick(object sender, RoutedEventArgs e)
-    {
-        _eventAggregator.Publish(new UsersPresenterCloseEvent());
+        OpenCreateUserDialog?.Invoke(this, EventArgs.Empty);
     }
 
     private void UsersDataGrid_OnRowEditEnded(object sender, DataGridRowEditEndedEventArgs e)
@@ -103,12 +63,18 @@ public partial class UsersView : BaseView, IUsersView
         if (e.EditAction == DataGridEditAction.Commit)
         {
             var user = e.Row.DataContext as Abstraction.Entities.User;
-            if (user != null) _eventAggregator.Publish(new UpdateUserClickEvent(user));
+            if (user != null)
+            {
+                UserUpdated?.Invoke(this, user);
+            }
         }
     }
 
     private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (UsersDataGrid.SelectedItem is Abstraction.Entities.User user) _eventAggregator.Publish(new DeleteUserClickEvent(user));
+        if (UsersDataGrid.SelectedItem is Abstraction.Entities.User user)
+        {
+            UserDeleted?.Invoke(this, user);
+        }
     }
 }

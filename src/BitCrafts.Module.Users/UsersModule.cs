@@ -1,11 +1,7 @@
-using System;
-using BitCrafts.Infrastructure.Abstraction.Application.Views;
 using BitCrafts.Infrastructure.Abstraction.Modules;
 using BitCrafts.Module.Users.Abstraction;
 using BitCrafts.Module.Users.Abstraction.Presenters;
 using BitCrafts.Module.Users.Abstraction.Views;
-using BitCrafts.Module.Users.Presenters;
-using BitCrafts.Module.Users.Views;
 using BitCrafts.Module.Users.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 

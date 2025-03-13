@@ -9,17 +9,11 @@ namespace BitCrafts.Module.Users.Views.User;
 
 public partial class CreateUserView : BaseView, ICreateUserView
 {
-    private readonly IEventAggregator _eventAggregator;
-
     public CreateUserView()
     {
         InitializeComponent();
     }
 
-    public CreateUserView(IEventAggregator eventAggregator) : this()
-    {
-        _eventAggregator = eventAggregator;
-    }
 
     public override void UnsetBusy()
     {
@@ -32,20 +26,15 @@ public partial class CreateUserView : BaseView, ICreateUserView
         LoadingOverlay.IsVisible = true;
         base.SetBusy(message);
     }
-
-    public string GetPassword()
-    {
-        return PasswordTextBox.Text != null ? PasswordTextBox.Text.Trim() : string.Empty;
-    }
-
+ 
     private void CloseButtonOnClick(object sender, RoutedEventArgs e)
     {
-        _eventAggregator.Publish(new CreateUserPresenterCloseEvent());
+        CloseDialog?.Invoke(this, EventArgs.Empty);
     }
 
     private void AddButtonOnClick(object sender, RoutedEventArgs e)
     {
-        _eventAggregator.Publish(new CreateUserClickEvent(GetUser(), GetPassword()));
+        CreateUser?.Invoke(this, GetUser());
     }
 
     private Abstraction.Entities.User GetUser()
@@ -59,8 +48,11 @@ public partial class CreateUserView : BaseView, ICreateUserView
             BirthDate = BirthDatePicker.SelectedDate.HasValue ? BirthDatePicker.SelectedDate.Value : default,
             NationalNumber = NationalNumberTextBox.Text,
             PassportNumber = PassportNumberTextBox.Text,
-            UserAccount = new UserAccount()
+            Password = PasswordTextBox.Text?.Trim()
         };
         return user;
     }
+
+    public event EventHandler CloseDialog;
+    public event EventHandler<Abstraction.Entities.User> CreateUser;
 }

@@ -3,8 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using BitCrafts.Infrastructure.Abstraction.Application.Managers;
-using BitCrafts.Infrastructure.Abstraction.Events;
-using BitCrafts.Infrastructure.Abstraction.Threading;
 using BitCrafts.Infrastructure.Application.Avalonia.Extensions;
 using BitCrafts.Infrastructure.Application.Avalonia.Managers;
 using BitCrafts.Infrastructure.Extensions;

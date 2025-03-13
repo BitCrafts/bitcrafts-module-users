@@ -1,7 +1,10 @@
 using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
+using BitCrafts.Infrastructure.Abstraction.Threading;
 using BitCrafts.Module.Users.Abstraction.Presenters;
 using BitCrafts.Module.Users.Abstraction.Presenters.User;
 using BitCrafts.Module.Users.Abstraction.Views;
+using BitCrafts.Module.Users.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace BitCrafts.Module.Users.Presenters;
@@ -9,16 +12,45 @@ namespace BitCrafts.Module.Users.Presenters;
 public sealed class UsersModuleMainPresenter : BasePresenter<IUsersModuleMainView>, IUsersModuleMainPresenter
 {
     private readonly IUsersPresenter _usersPresenter;
+    private readonly IBackgroundThreadDispatcher _backgroundThreadDispatcher;
+    private readonly UsersDbContext _usersDbContext;
 
-    public UsersModuleMainPresenter(IUsersModuleMainView view,IUsersPresenter usersPresenter,
-        ILogger<BasePresenter<IUsersModuleMainView>> logger) :
+    public UsersModuleMainPresenter(IUsersModuleMainView view, IUsersPresenter usersPresenter,
+        ILogger<BasePresenter<IUsersModuleMainView>> logger, IBackgroundThreadDispatcher backgroundThreadDispatcher,
+        UsersDbContext usersDbContext) :
         base(view, logger)
     {
         _usersPresenter = usersPresenter;
+        _backgroundThreadDispatcher = backgroundThreadDispatcher;
+        _usersDbContext = usersDbContext;
+        View.SetTitle("Users Modules");
+    }
+
+    private void ApplyDatabaseMigration()
+    {
+        Logger.LogInformation("Applying database migrations...");
+        _usersDbContext.Database.Migrate();
     }
 
     protected override void OnInitialize()
     {
-        View.AppendPresenter(_usersPresenter);
+        View.SetupPresenters(_usersPresenter);
+    }
+
+    protected override async void OnViewLoaded(object sender, EventArgs e)
+    {
+        View.SetBusy("Applying database migrations...");
+        await _backgroundThreadDispatcher.InvokeAsync(ApplyDatabaseMigration);
+        base.OnViewLoaded(sender, e);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _usersPresenter.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 }

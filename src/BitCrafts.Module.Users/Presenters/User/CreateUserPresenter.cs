@@ -2,7 +2,6 @@ using BitCrafts.Infrastructure.Abstraction.Application.Managers;
 using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
 using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Presenters;
 using BitCrafts.Module.Users.Abstraction.Presenters.User;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
 using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
@@ -25,44 +24,38 @@ public class CreateUserPresenter : BasePresenter<ICreateUserView>, ICreateUserPr
         _createUserUseCase = createUserUseCase;
         _eventAggregator = eventAggregator;
         _windowManager = windowManager;
-    }
-
-    protected override void OnViewLoaded(object sender, EventArgs e)
-    {
-        base.OnViewLoaded(sender, e);
-        View.SetTitle("New User");
+        View.SetTitle("Create User");
     }
 
     protected override void OnInitialize()
     {
-        _eventAggregator.Subscribe<CreateUserClickEvent>(OnCreateUserClick);
-        _eventAggregator.Subscribe<CreateUserPresenterCloseEvent>(OnClose);
-        
+        View.CloseDialog += ViewOnCloseDialog;
+        View.CreateUser += ViewOnCreateUser;
     }
 
-    private void OnClose(CreateUserPresenterCloseEvent obj)
-    {
-        _windowManager.CloseWindow<CreateUserPresenter>();
-    }
-
-    private async void OnCreateUserClick(CreateUserClickEvent obj)
+    private async void ViewOnCreateUser(object sender, Abstraction.Entities.User e)
     {
         var useCaseInput = new CreateUserUseCaseInput
         {
-            User = obj.User,
-            Password = obj.Password
+            User = e,
+            Password = e.Password
         };
         View.SetBusy("Loading...");
         await _createUserUseCase.Execute(useCaseInput);
         View.UnsetBusy();
     }
 
+    private void ViewOnCloseDialog(object sender, EventArgs e)
+    {
+        _windowManager.CloseWindow<ICreateUserPresenter>();
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            _eventAggregator.Unsubscribe<CreateUserClickEvent>(OnCreateUserClick);
-            _eventAggregator.Unsubscribe<CreateUserPresenterCloseEvent>(OnClose);
+            View.CloseDialog -= ViewOnCloseDialog;
+            View.CreateUser -= ViewOnCreateUser;
         }
 
         base.Dispose(disposing);

@@ -4,14 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BitCrafts.Module.Users.Views.UsersModuleMainView">
-    <Grid>
-        <TabControl Grid.Row="0">
-            <TabItem x:Name="UsersTabItem" Header="Users">
-
-            </TabItem>
-            <TabItem x:Name="FamiliesTabItem" Header="Families">
-
-            </TabItem>
-        </TabControl> 
+    <Grid x:Name="RootGrid" ColumnDefinitions="Auto,*" Margin="0">
+        <Grid Grid.Column="0" Margin="5">
+            <ListBox Padding="0" Margin="0" x:Name="FeaturesListVox" SelectionMode="Single"
+                     MinWidth="200" BorderBrush="Green"
+                     SelectionChanged="FeaturesListVox_OnSelectionChanged">
+            </ListBox>
+        </Grid>
+        <Grid Grid.Column="1" Margin="5">
+            <Border Margin="0" Padding="0" BorderBrush="Green" BorderThickness="1">
+                <ScrollContentPresenter x:Name="CurrentContent"></ScrollContentPresenter>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
