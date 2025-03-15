@@ -2,8 +2,9 @@ using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Infrastructure.Abstraction.Repositories;
 using BitCrafts.Infrastructure.Abstraction.UseCases;
 using BitCrafts.Module.Users.Abstraction.Events;
+using BitCrafts.Module.Users.Abstraction.Events.UserEvents;
 using BitCrafts.Module.Users.Abstraction.Repositories;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
+using BitCrafts.Module.Users.Abstraction.UseCases;
 using BitCrafts.Module.Users.Entities;
 
 namespace BitCrafts.Module.Users.UseCases.UserUsesCases;

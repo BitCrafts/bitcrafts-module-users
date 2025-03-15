@@ -3,10 +3,11 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using BitCrafts.Infrastructure.Avalonia.Views;
 using BitCrafts.Module.Users.Abstraction.Views;
+using Microsoft.Extensions.Logging;
 
-namespace BitCrafts.Module.Users.Views.User;
+namespace BitCrafts.Module.Users.Views;
 
-public partial class UsersView : BaseView, IUsersView
+public partial class UsersView : BaseControl, IUsersView
 {
     private readonly ObservableCollection<Abstraction.Entities.User> _users;
     public event EventHandler<Abstraction.Entities.User> UserUpdated;
@@ -16,20 +17,23 @@ public partial class UsersView : BaseView, IUsersView
     public UsersView()
     {
         InitializeComponent();
+    }
+
+    public UsersView(ILogger<UsersView> logger)
+        : base(logger)
+    {
+        InitializeComponent();
         _users = new ObservableCollection<Abstraction.Entities.User>();
         UsersDataGrid.ItemsSource = _users;
     }
 
-    public override void SetBusy(string message)
+
+    protected override void OnAppeared()
     {
-        LoadingOverlay.IsVisible = true;
-        base.SetBusy(message);
     }
 
-    public override void UnsetBusy()
+    protected override void OnDisappeared()
     {
-        LoadingOverlay.IsVisible = false;
-        base.UnsetBusy();
     }
 
     public void RefreshUsers(IEnumerable<Abstraction.Entities.User> users)

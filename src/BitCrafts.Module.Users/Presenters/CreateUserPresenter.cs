@@ -1,14 +1,13 @@
 using BitCrafts.Infrastructure.Abstraction.Application.Managers;
 using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
 using BitCrafts.Infrastructure.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Presenters.User;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
+using BitCrafts.Module.Users.Abstraction.Presenters;
+using BitCrafts.Module.Users.Abstraction.UseCases;
+using BitCrafts.Module.Users.Abstraction.UseCases.Inputs;
 using BitCrafts.Module.Users.Abstraction.Views;
 using Microsoft.Extensions.Logging;
 
-namespace BitCrafts.Module.Users.Presenters.User;
+namespace BitCrafts.Module.Users.Presenters;
 
 public class CreateUserPresenter : BasePresenter<ICreateUserView>, ICreateUserPresenter
 {
@@ -24,46 +23,38 @@ public class CreateUserPresenter : BasePresenter<ICreateUserView>, ICreateUserPr
         _createUserUseCase = createUserUseCase;
         _eventAggregator = eventAggregator;
         _windowManager = windowManager;
-        
+        View.Title = "Create User";
     }
 
-    protected override void OnViewLoaded(object sender, EventArgs e)
-    {
-        View.SetTitle("Create User");
-        base.OnViewLoaded(sender, e);
-    }
-
-    protected override void OnInitialize()
-    {
-        View.CloseDialog += ViewOnCloseDialog;
-        View.CreateUser += ViewOnCreateUser;
-    }
 
     private async void ViewOnCreateUser(object sender, Abstraction.Entities.User e)
     {
         var useCaseInput = new CreateUserUseCaseInput
         {
             User = e,
-            Password = e.Password
         };
         View.SetBusy("Loading...");
         await _createUserUseCase.Execute(useCaseInput);
         View.UnsetBusy();
     }
 
-    private void ViewOnCloseDialog(object sender, EventArgs e)
+
+    protected override Task OnAppearedAsync()
     {
-        _windowManager.CloseWindow<ICreateUserPresenter>();
+        View.CloseDialog += ViewOnCloseDialog;
+        View.CreateUser += ViewOnCreateUser;
+        return Task.CompletedTask;
     }
 
-    protected override void Dispose(bool disposing)
+    private void ViewOnCloseDialog(object sender, EventArgs e)
     {
-        if (disposing)
-        {
-            View.CloseDialog -= ViewOnCloseDialog;
-            View.CreateUser -= ViewOnCreateUser;
-        }
+        _windowManager.ClosePresenter<ICreateUserPresenter>();
+    }
 
-        base.Dispose(disposing);
+    protected override Task OnDisAppearedAsync()
+    {
+        View.CloseDialog -= ViewOnCloseDialog;
+        View.CreateUser -= ViewOnCreateUser;
+        return Task.CompletedTask;
     }
 }

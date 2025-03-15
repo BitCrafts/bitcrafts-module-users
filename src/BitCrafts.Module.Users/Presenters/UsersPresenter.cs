@@ -1,17 +1,14 @@
 ﻿using BitCrafts.Infrastructure.Abstraction.Application.Managers;
 using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
 using BitCrafts.Infrastructure.Abstraction.Events;
-using BitCrafts.Infrastructure.Abstraction.Threading;
-using BitCrafts.Module.Users.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Presenters.User;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
+using BitCrafts.Module.Users.Abstraction.Events.UserEvents;
+using BitCrafts.Module.Users.Abstraction.Presenters;
+using BitCrafts.Module.Users.Abstraction.UseCases;
+using BitCrafts.Module.Users.Abstraction.UseCases.Inputs;
 using BitCrafts.Module.Users.Abstraction.Views;
-using BitCrafts.Module.Users.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BitCrafts.Module.Users.Presenters.User;
+namespace BitCrafts.Module.Users.Presenters;
 
 public sealed class UsersPresenter : BasePresenter<IUsersView>, IUsersPresenter
 {
@@ -31,27 +28,9 @@ public sealed class UsersPresenter : BasePresenter<IUsersView>, IUsersPresenter
         _displayUsersUseCase = displayUsersUseCase;
         _updateUserUseCase = updateUserUseCase;
         _deleteUserUseCase = deleteUserUseCase;
-        View.SetTitle("Users");
+        View.Title = "Users";
     }
 
-    protected override async void OnViewLoaded(object sender, EventArgs e)
-    {
-        base.OnViewLoaded(sender, e);
-        View.SetBusy("Loading users...");
-        await _displayUsersUseCase.Execute();
-        View.UnsetBusy();
-    }
-
-
-    protected override void OnInitialize()
-    {
-        View.UserDeleted += OnDeleteUserClicked;
-        View.UserUpdated += OnUpdateUserClicked;
-        View.OpenCreateUserDialog += ViewOnOpenCreateUserDialog;
-        _eventAggregator.Subscribe<CreateUserEvent>(OnUserCreated);
-        _eventAggregator.Subscribe<DisplayUsersEvent>(OnDisplayUsers);
-        _eventAggregator.Subscribe<DeleteUserEvent>(OnDeleteUser);
-    }
 
     private void OnDeleteUser(DeleteUserEvent obj)
     {
@@ -65,7 +44,7 @@ public sealed class UsersPresenter : BasePresenter<IUsersView>, IUsersPresenter
 
     private async void ViewOnOpenCreateUserDialog(object sender, EventArgs args)
     {
-        await _windowManager.ShowDialogWindowAsync<ICreateUserPresenter>();
+        await _windowManager.ShowPresenterAsync<ICreateUserPresenter>();
     }
 
     private void OnUserCreated(CreateUserEvent obj)
@@ -84,16 +63,25 @@ public sealed class UsersPresenter : BasePresenter<IUsersView>, IUsersPresenter
         await _deleteUserUseCase.Execute(new DeleteUserUseCaseInput(obj));
     }
 
-    protected override void Dispose(bool disposing)
+    protected override async Task OnAppearedAsync()
     {
-        if (disposing)
-        {
-            View.UserDeleted -= OnDeleteUserClicked;
-            View.UserUpdated -= OnUpdateUserClicked;
-            _eventAggregator.Unsubscribe<CreateUserEvent>(OnUserCreated);
-            _eventAggregator.Unsubscribe<DisplayUsersEvent>(OnDisplayUsers);
-        }
+        View.UserDeleted += OnDeleteUserClicked;
+        View.UserUpdated += OnUpdateUserClicked;
+        View.OpenCreateUserDialog += ViewOnOpenCreateUserDialog;
+        _eventAggregator.Subscribe<CreateUserEvent>(OnUserCreated);
+        _eventAggregator.Subscribe<DisplayUsersEvent>(OnDisplayUsers);
+        _eventAggregator.Subscribe<DeleteUserEvent>(OnDeleteUser);
+        View.SetBusy("Loading users...");
+        await _displayUsersUseCase.Execute();
+        View.UnsetBusy();
+    }
 
-        base.Dispose(disposing);
+    protected override Task OnDisAppearedAsync()
+    {
+        View.UserDeleted -= OnDeleteUserClicked;
+        View.UserUpdated -= OnUpdateUserClicked;
+        _eventAggregator.Unsubscribe<CreateUserEvent>(OnUserCreated);
+        _eventAggregator.Unsubscribe<DisplayUsersEvent>(OnDisplayUsers);
+        return Task.CompletedTask;
     }
 }

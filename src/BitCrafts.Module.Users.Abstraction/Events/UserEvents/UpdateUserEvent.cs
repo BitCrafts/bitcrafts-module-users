@@ -1,7 +1,7 @@
 using BitCrafts.Infrastructure.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Entities;
 
-namespace BitCrafts.Module.Users.Abstraction.Events;
+namespace BitCrafts.Module.Users.Abstraction.Events.UserEvents;
 
 public class UpdateUserEvent : BaseEvent
 {

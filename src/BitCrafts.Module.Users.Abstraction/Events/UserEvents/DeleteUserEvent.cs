@@ -1,6 +1,6 @@
 using BitCrafts.Infrastructure.Abstraction.Events;
 
-namespace BitCrafts.Module.Users.Abstraction.Events;
+namespace BitCrafts.Module.Users.Abstraction.Events.UserEvents;
 
 public class DeleteUserEvent : BaseEvent
 {

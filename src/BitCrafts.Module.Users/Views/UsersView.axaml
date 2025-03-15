@@ -5,7 +5,7 @@
              HorizontalAlignment="Stretch"
              VerticalContentAlignment="Stretch"
              HorizontalContentAlignment="Stretch"
-             x:Class="BitCrafts.Module.Users.Views.User.UsersView">
+             x:Class="BitCrafts.Module.Users.Views.UsersView">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -2,14 +2,21 @@ using Avalonia.Controls;
 using BitCrafts.Infrastructure.Abstraction.Application.Presenters;
 using BitCrafts.Infrastructure.Avalonia.Views;
 using BitCrafts.Module.Users.Abstraction.Views;
+using Microsoft.Extensions.Logging;
 
 namespace BitCrafts.Module.Users.Views;
 
-public partial class UsersModuleMainView : BaseView, IUsersModuleMainView
+public partial class UsersModuleMainView : BaseControl, IUsersModuleMainView
 {
     private IList<IPresenter> _presenters;
 
     public UsersModuleMainView()
+    {
+        InitializeComponent();
+    }
+
+    public UsersModuleMainView(ILogger<UsersModuleMainView> logger)
+        : base(logger)
     {
         InitializeComponent();
     }
@@ -24,13 +31,21 @@ public partial class UsersModuleMainView : BaseView, IUsersModuleMainView
 
     public void SetupPresenters(params IPresenter[] presenters)
     {
-        _presenters = presenters.ToList(); 
+        _presenters = presenters.ToList();
         foreach (var presenter in _presenters)
         {
             FeaturesListVox.Items.Add(new ListBoxItem()
             {
-                Content = presenter.GetView().GetTitle()
+                Content = presenter.GetView().Title
             });
         }
+    }
+
+    protected override void OnAppeared()
+    {
+    }
+
+    protected override void OnDisappeared()
+    {
     }
 }

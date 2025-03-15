@@ -4,13 +4,18 @@
     <option name="projectPerEditor">
       <map>
         <entry key="src/BitCrafts.Avalonia.Application/App.axaml" value="src/BitCrafts.Avalonia.Application/BitCrafts.Avalonia.Application.csproj" />
+        <entry key="src/BitCrafts.Module.Users/Dialogs/SelectUsersDialog.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Module.Users/Views/CreateUserView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
+        <entry key="src/BitCrafts.Module.Users/Views/DisplayUsersView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Module.Users/Views/Family/FamilyView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Module.Users/Views/User/CreateUserView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
+        <entry key="src/BitCrafts.Module.Users/Views/User/DisplayUsersView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
+        <entry key="src/BitCrafts.Module.Users/Views/User/SelectUserView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Module.Users/Views/User/UsersView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Module.Users/Views/UsersModuleMainView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Module.Users/Views/UsersView.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
         <entry key="src/BitCrafts.Users/Views/UsersView.axaml" value="src/BitCrafts.Avalonia.Application/BitCrafts.Avalonia.Application.csproj" />
+        <entry key="src/BitCrafts.UsersDemoApplicationAvalonia/App.axaml" value="src/BitCrafts.UsersDemoApplicationAvalonia/BitCrafts.UsersDemoApplicationAvalonia.csproj" />
       </map>
     </option>
   </component>

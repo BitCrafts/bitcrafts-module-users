@@ -3,9 +3,10 @@ using BitCrafts.Infrastructure.Abstraction.Repositories;
 using BitCrafts.Infrastructure.Abstraction.Services;
 using BitCrafts.Infrastructure.Abstraction.UseCases;
 using BitCrafts.Module.Users.Abstraction.Events;
+using BitCrafts.Module.Users.Abstraction.Events.UserEvents;
 using BitCrafts.Module.Users.Abstraction.Repositories;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases;
-using BitCrafts.Module.Users.Abstraction.UseCases.UserUseCases.Inputs;
+using BitCrafts.Module.Users.Abstraction.UseCases;
+using BitCrafts.Module.Users.Abstraction.UseCases.Inputs;
 using BitCrafts.Module.Users.Entities;
 
 namespace BitCrafts.Module.Users.UseCases.UserUsesCases;
@@ -28,7 +29,7 @@ public sealed class CreateUserUseCase : BaseUseCase<CreateUserUseCaseInput>, ICr
     protected override async Task ExecuteCore(CreateUserUseCaseInput input)
     {
         var salt = _hashingService.GenerateSalt();
-        var hashedPassword = _hashingService.HashPassword(input.Password);
+        var hashedPassword = _hashingService.HashPassword(input.User.Password.Trim());
 
         input.User.HashedPassword = hashedPassword;
         input.User.PasswordSalt = salt;

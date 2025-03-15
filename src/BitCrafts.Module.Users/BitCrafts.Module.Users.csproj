@@ -21,8 +21,8 @@
         <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.2.5"/>
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.5"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.2.5"/>
-        <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.0.5" />
-        <PackageReference Include="BitCrafts.Infrastructure.Avalonia" Version="1.0.5" />
+        <PackageReference Include="BitCrafts.Infrastructure.Abstraction" Version="1.1.0" />
+        <PackageReference Include="BitCrafts.Infrastructure.Avalonia" Version="1.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
           <PrivateAssets>all</PrivateAssets>
@@ -34,12 +34,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Views\User\UsersView.axaml.cs">
+        <Compile Update="Views\CreateUserView.axaml.cs">
+          <DependentUpon>CreateUserView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\SelectUserView.axaml.cs">
+          <DependentUpon>SelectUserView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\UsersView.axaml.cs">
           <DependentUpon>UsersView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\User\CreateUserView.axaml.cs">
-          <DependentUpon>CreateUserView.axaml</DependentUpon>
+        <Compile Update="Views\DisplayUsersView.axaml.cs">
+          <DependentUpon>DisplayUsersView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
     </ItemGroup>

@@ -1,32 +1,30 @@
 using Avalonia.Interactivity;
 using BitCrafts.Infrastructure.Avalonia.Views;
-using BitCrafts.Infrastructure.Abstraction.Events;
-using BitCrafts.Module.Users.Abstraction.Entities;
-using BitCrafts.Module.Users.Abstraction.Events;
 using BitCrafts.Module.Users.Abstraction.Views;
+using Microsoft.Extensions.Logging;
 
-namespace BitCrafts.Module.Users.Views.User;
+namespace BitCrafts.Module.Users.Views;
 
-public partial class CreateUserView : BaseView, ICreateUserView
+public partial class CreateUserView : BaseControl, ICreateUserView
 {
     public CreateUserView()
     {
         InitializeComponent();
     }
-
-
-    public override void UnsetBusy()
+    public CreateUserView(ILogger<CreateUserView> logger)
+        : base(logger)
     {
-        LoadingOverlay.IsVisible = false;
-        base.UnsetBusy();
+        InitializeComponent();
     }
 
-    public override void SetBusy(string message)
+    protected override void OnAppeared()
     {
-        LoadingOverlay.IsVisible = true;
-        base.SetBusy(message);
     }
- 
+
+    protected override void OnDisappeared()
+    {
+    }
+
     private void CloseButtonOnClick(object sender, RoutedEventArgs e)
     {
         CloseDialog?.Invoke(this, EventArgs.Empty);

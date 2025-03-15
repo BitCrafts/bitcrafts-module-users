@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:entities="clr-namespace:BitCrafts.Module.Users.Abstraction.Entities;assembly=BitCrafts.Module.Users.Abstraction"
+             VerticalAlignment="Stretch"
+             HorizontalAlignment="Stretch"
+             VerticalContentAlignment="Stretch"
+             HorizontalContentAlignment="Stretch"
+             x:Class="BitCrafts.Module.Users.Views.DisplayUsersView">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Gestion des Utilisateurs" FontSize="18" FontWeight="Bold" Margin="12" />
+        <DataGrid Grid.Row="1" x:Name="UsersDataGrid" AutoGenerateColumns="False"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                  GridLinesVisibility="All"
+                  HorizontalScrollBarVisibility="Auto"
+                  IsReadOnly="True"
+                  VerticalScrollBarVisibility="Auto"
+                  BorderThickness="0" BorderBrush="Green"
+                  MinHeight="300">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:DataType="entities:User" Header="Prénom" Binding="{Binding FirstName}"
+                                    Width="*" />
+                <DataGridTextColumn x:DataType="entities:User" Header="Nom" Binding="{Binding LastName}" Width="*" />
+                <DataGridTextColumn x:DataType="entities:User" Header="Email" Binding="{Binding Email}" Width="*" />
+                <DataGridTextColumn x:DataType="entities:User" Header="Téléphone" Binding="{Binding PhoneNumber}"
+                                    Width="*" />
+                <DataGridTextColumn x:DataType="entities:User" Header="Date de naissance"
+                                    Binding="{Binding BirthDate}"
+                                    Width="*" />
+                <DataGridTextColumn x:DataType="entities:User" Header="Numéro national"
+                                    Binding="{Binding NationalNumber}" Width="*" />
+                <DataGridTextColumn x:DataType="entities:User" Header="Numéro de passeport"
+                                    Binding="{Binding PassportNumber}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
